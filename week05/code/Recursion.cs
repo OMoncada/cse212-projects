@@ -14,8 +14,16 @@ public static class Recursion
     /// </summary>
     public static int SumSquaresRecursive(int n)
     {
-        // TODO Start Problem 1
-        return 0;
+        // Base case: if n <= 0, return 0
+        if (n <= 0)
+            return 0;
+
+        // Base case: if n == 1, return 1^2 = 1
+        if (n == 1)
+            return 1;
+
+        // Recursive case: n^2 + sum of squares from 1 to (n-1)
+        return n * n + SumSquaresRecursive(n - 1);
     }
 
     /// <summary>
@@ -40,6 +48,24 @@ public static class Recursion
     public static void PermutationsChoose(List<string> results, string letters, int size, string word = "")
     {
         // TODO Start Problem 2
+        // Base case: if we have built a word of the desired size
+        if (word.Length == size)
+        {
+            results.Add(word);
+            return;
+        }
+
+        // Recursive case: try adding each remaining letter
+        for (int i = 0; i < letters.Length; i++)
+        {
+            char letter = letters[i];
+            // Create a new string without the current letter
+            if (!word.Contains(letter))
+            {
+                // Recurse with the current letter added to word and remaining letters
+                PermutationsChoose(results, letters, size, word + letter);
+            }
+        }
     }
 
     /// <summary>
@@ -86,6 +112,10 @@ public static class Recursion
     /// </summary>
     public static decimal CountWaysToClimb(int s, Dictionary<int, decimal>? remember = null)
     {
+        // Initialize memoization dictionary if not provided
+        if (remember == null)
+            remember = new Dictionary<int, decimal>();
+
         // Base Cases
         if (s == 0)
             return 0;
@@ -98,8 +128,18 @@ public static class Recursion
 
         // TODO Start Problem 3
 
-        // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        // Check if we already calculated this value (memoization)
+        if (remember.ContainsKey(s))
+            return remember[s];
+
+        // Solve using recursion with memoization
+        decimal ways = CountWaysToClimb(s - 1, remember) +
+                      CountWaysToClimb(s - 2, remember) +
+                      CountWaysToClimb(s - 3, remember);
+
+        // Store the result in memoization dictionary
+        remember[s] = ways;
+
         return ways;
     }
 
@@ -129,10 +169,11 @@ public static class Recursion
     {
         // If this is the first time running the function, then we need
         // to initialize the currPath list.
-        if (currPath == null) {
+        if (currPath == null)
+        {
             currPath = new List<ValueTuple<int, int>>();
         }
-        
+
         // currPath.Add((1,2)); // Use this syntax to add to the current path
 
         // TODO Start Problem 5
