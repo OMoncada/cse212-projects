@@ -12,6 +12,8 @@ public class Node
     public void Insert(int value)
     {
         // TODO Start Problem 1
+        if (value == Data)
+            return;
 
         if (value < Data)
         {
@@ -34,8 +36,16 @@ public class Node
     public bool Contains(int value)
     {
         // TODO Start Problem 2
-        return false;
+        if (value == Data)
+            return true;
+
+        if (value < Data)
+            return Left?.Contains(value) ?? false;
+        else
+            return Right?.Contains(value) ?? false;
+
     }
+
 
     public int GetHeight()
     {
